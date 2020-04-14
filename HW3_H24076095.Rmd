@@ -1,0 +1,75 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Programming HW3
+##### NCKU STAT 111  /  H24076095
+
+
+1. Write Rmarkdown codes to provide the expression of probability density function (pdf) or probability mass function (pmf) of the following distribution.  
+    (a) **Binomial distribution with parameters $n$ and $p$ with $x = 0, ..., n$.**    
+    Let $X \sim B(n,p)$. Then $X$ has density function:
+    $$f(X=x) = (^n_x)p^x(1-p)^{n-x}, \qquad x=0,1,2,...,n$$  
+    (b) **Gamma distribution with shape parameter $\alpha$ and the rate parameter $\lambda$ with $x>0$.**    
+    Let $X \sim \Gamma(\alpha,\lambda)$. Then $X$ has density function:
+    $$f(X=x)=\frac{x^{(\alpha-1)}\lambda^\alpha e^{(-\lambda x)}}{\Gamma(\alpha)},\qquad x>0$$  
+    (c) **Normal distribution with parameters $\mu$ and $\sigma^2$ with $-\infty<x<\infty$.**    
+    Let $X \sim N(\mu,\sigma^2)$. Then $X$ has density function:
+    $$f(X=x)=\frac1{\sigma \sqrt{2\pi}}e^{-\frac12(\frac{x-\mu}{\sigma})^2}, \qquad -\infty<x<\infty$$        
+
+    
+2. Draw the pdf (or pmf) of each distribution in Question 1. Write codes and use all control
+argument in plot(...) and par(...) to show the following plots.  
+```{r fig.width=10, fig.height=8}
+par(mfrow = c(2,2))
+# 1
+x <- 0:10
+for (i in 1:3) {
+  p_x <- dbinom(x, size=10, prob=c(0.7, 0.5, 0.2)[i]) # size = n(=10), prob = p
+  plot  (x, p_x, type='h', xlab="", ylab="", ylim = c(0, 0.4), col=c(1,4,2)[i], lty=c(1,4,2)[i])
+  points(x, p_x, pch=c(19, 8, 17)[i], col=c(1,4,2)[i])
+  if(i != 3) par(new=TRUE)
+}
+title(expression("Bimomial(n, p) with n = 10"), xlab = "x", ylab = "pmf")
+legend("topright", c("p = 0.7", "p = 0.5", "p = 0.2"), col=c(1,4,2), lty=c(1,4,2), pch=c(19,8,17))
+
+#2
+curve(expr = dgamma(x = x, shape = 1, rate = 3), ylab = "pdf", col = 1, xlim = c(0, 5), ylim = c(0, 3))
+title(expression(paste("Gamma(", alpha , ", ", lambda, ") with ", lambda, " = 3")))
+for (i in 1:3) {
+  curve(expr = dgamma(x = x, shape = c(2, 3, 5)[i], rate = 3), col = c(2, 4, 8)[i], lty=c(2,4,11)[i], add = TRUE)
+}
+legend(x = "topright", legend = c(expression(paste(alpha," = 1")),
+                                  expression(paste(alpha," = 2")),
+                                  expression(paste(alpha," = 3")),
+                                  expression(paste(alpha," = 5"))), 
+       col = c(1,2,4,8), lty = c(1,2,4,11))
+
+#3
+curve(expr = dnorm(x = x, mean = 5), ylab = "pdf", col = 1, xlim = c(0, 20), ylim = c(0, 0.4))
+title(expression(paste("N(", mu , ", ", sigma^2, ") with ", sigma^2, " = 1")))
+for (i in 1:3) {
+  curve(expr = dnorm(x = x, mean = c(10,12,14)[i]), col = c(2, 4, 8)[i], lty=c(2,4,5)[i], add = TRUE)
+}
+legend(x = "topright", legend = c(expression(paste(mu," = 5")),
+                                  expression(paste(mu," = 10")),
+                                  expression(paste(mu," = 12")),
+                                  expression(paste(mu," = 14"))), 
+       col = c(1,2,4,8), lty = c(1,2,4,5))
+
+#4
+curve(expr = dnorm(x = x, sd = 0.5), ylab = "pdf", col = 1, xlim = c(-8, 8), ylim = c(0, 0.8))
+title(expression(paste("N(", mu , ", ", sigma^2, ") with ", mu, " = 0")))
+for (i in 1:3) {
+  curve(expr = dnorm(x = x, sd = c(1,2,3)[i]), col = c(2, 4, 8)[i], lty=c(2,4,5)[i], add = TRUE)
+}
+legend(x = "topright", legend = c(expression(paste(sigma," = 0.5")),
+                                  expression(paste(sigma," = 1")),
+                                  expression(paste(sigma," = 2")),
+                                  expression(paste(sigma," = 3"))), 
+       col = c(1,2,4,8), lty = c(1,2,4,5))
+```
+
